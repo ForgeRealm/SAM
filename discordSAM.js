@@ -131,7 +131,6 @@ class discordSAM {
             const command = require(`./discordCommands/${file}`);
             commands.push(command.data.toJSON());
         }
-        this.client.commands = new Collection();
         let guildId = "977760171168251945";
         for (const command of commands) {
             // this.client.commands.set(command.name, command);
@@ -140,7 +139,6 @@ class discordSAM {
     }
     deleteCommands() {
         let guildId = "977760171168251945";
-        this.client.commands = new Collection();
         this.client.guilds.cache.get(guildId).commands.set([])
             .then(() => console.log('Deleted Commands'))
             .catch(console.error);
