@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+body {
+    min-height: 100vh; /*画面の高さの最小値を指定*/
+    display: flex;
+    flex-direction: column;
+    background-color: #2b3747;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+  }
+
+header {
+    background-color: #2b3747;
+    border-bottom: 4px solid #f0f0f0;
+    position: sticky;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    top: 0;
+    z-index: 100;
+}
+
+div .menu{
+    background-color: #44546a;
+}
