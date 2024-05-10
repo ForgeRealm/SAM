@@ -22,7 +22,16 @@ class httpsSAM {
                     body += data;
                 });
                 req.on('end', () => {
-                    let data = JSON.parse(body);
+                    let data;
+                    try {
+                        data = JSON.parse(body);
+                    }
+                    catch (e) {
+                        res.writeHead(400);
+                        res.end();
+                        console.log(e);
+                        return;
+                    }
                     if (data.sender === 'server') {
                         dataManager.serverData(data);// data is sent from server
                     }

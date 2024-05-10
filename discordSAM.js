@@ -69,16 +69,13 @@ class discordSAM {
         });
         this.client.on('interactionCreate', async (interaction) => {
             if (!interaction.isCommand()) return;
-            const command = this.client.commands.get(interaction.commandName);
-            if (!command) return;
             try {
                 if (interaction.commandName === 'setup') {
                     if (!interaction.member.permissions.has('ADMINISTRATOR')) {
-                        return await interaction.reply('このコマンドを実行する権限がありません。');
+                        return interaction.reply('このコマンドを実行する権限がありません。');
                     }
-                    interaction.reply('セットアップを開始します。');
                     if (dataManager.discordServerData[interaction.guildId]['role'] !== undefined) {
-                        return await interaction.editReply('既にセットアップが完了しています。\n設定を変更する場合は、`/option`コマンドを使用してください。');
+                        return interaction.reply('既にセットアップが完了しています。\n設定を変更する場合は、`/option`コマンドを使用してください。');
                     }
                     const role = interaction.options.getRole('role');
                     const adminChannel = interaction.options.getChannel('admin_channel');
@@ -91,19 +88,16 @@ class discordSAM {
                         suffix: suffix,
                         serverTokens: []
                     };
-                    await interaction.editReply(`セットアップが完了しました。`);
+                    dataManager.saveData('discord');
+                    interaction.reply(`セットアップが完了しました。`);
                 }
                 else if (interaction.commandName === 'register') {
                     if (!interaction.member.permissions.has('ADMINISTRATOR')) {
-                        return await interaction.reply('このコマンドを実行する権限がありません。');
+                        return interaction.reply('このコマンドを実行する権限がありません。');
                     }
                     else if (interaction.channelId !== dataManager.discordServerData[interaction.guildId].adminChannel) {
-                        // ephemeral: trueでエラーメッセージを表示しない
-                        return await interaction.reply(
-                            { content: 'このチャンネルではこのコマンドを実行できません。\n管理チャンネルで実行してください。', ephemeral: true }
-                        );
+                        return interaction.reply({ content: 'このチャンネルではこのコマンドを実行できません。\n管理チャンネルで実行してください。', ephemeral: true });
                     }
-                    interaction.reply('サーバーを登録します。');
                     // サーバートークンの発行
                     const serverName = interaction.options.getString('server_name');
                     const serverToken = Math.random().toString(36).substring(2, 12);// 10文字のランダムな英数字
@@ -115,7 +109,8 @@ class discordSAM {
                         serverName: serverName,
                         guildId: interaction.guildId
                     };
-                    await interaction.editReply(`サーバーを登録しました。\nサーバー名: ${serverName}\nサーバートークン: ${serverToken}\nこのトークンをMinecraftサーバーのConfigに追加してください。`);
+                    dataManager.saveData('minecraft');
+                    interaction.reply(`サーバーを登録しました。\nサーバー名: ${serverName}\nサーバートークン: ${serverToken}\nこのトークンをMinecraftサーバーのConfigに追加してください。`);
                 }
             } catch (error) {
                 console.error(error);
